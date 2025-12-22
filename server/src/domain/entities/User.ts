@@ -1,10 +1,10 @@
 export class User {
     constructor (
-        public readonly id:string,
-        public email:string,
-        public password:string,
-        public role:'admin'| 'parent' | 'teacher' | 'student',
-        public updatedAt:Date,
-        public createdAt:Date
+        private readonly id:string,
+        private email:string,
+        private password:string,
+        private role:'admin'| 'parent' | 'teacher' | 'student',
+        private updatedAt:Date,
+        private createdAt:Date
     ) {}
 }
