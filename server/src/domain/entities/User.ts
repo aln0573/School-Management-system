@@ -7,8 +7,8 @@ export class User {
         private email:string,
         private password:string,
         private role:UserRole,
-        private updatedAt:Date,
-        private createdAt:Date
+        private createdAt:Date,
+        private updatedAt:Date
     ) {
         this.validate();
     }
@@ -40,6 +40,10 @@ export class User {
 
     getEmail(){
         return this.email;
+    }
+
+    getPassword(){
+        return this.password;
     }
 
     getRole() {
