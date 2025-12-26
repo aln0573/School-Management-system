@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { User } from "../../domain/entities/User";
 import { IUserRepositories } from "../../domain/repositories/IUserRepository";
-import { CreateUserDTO } from "../dto/userDTO";
+import { CreateUserDTO } from "../dto/UserDTO";
 
 export class CreateUser {
   constructor(private userRepository: IUserRepositories) {}
