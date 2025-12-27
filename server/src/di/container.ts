@@ -1,0 +1,20 @@
+import "reflect-metadata";
+import { container } from "tsyringe";
+import { IUserRepositories } from "../domain/repositories/IUserRepository";
+import { MongoUserRepository } from "../infrastructure/database/repositories/MongoUserRepository";
+import { CreateUser } from "../application/use-cases/CreateUser";
+import { UserController } from "../presentation/controllers/UserController";
+
+container.register<IUserRepositories>("IUserRepositories", {
+  useClass: MongoUserRepository,
+});
+
+container.register(CreateUser, {
+  useClass: CreateUser,
+});
+
+container.register(UserController, {
+  useClass: UserController,
+});
+
+export { container };

@@ -1,8 +1,13 @@
 import express from "express";
 import "dotenv/config";
 import database from "./infrastructure/database/mongoose/config";
+import userRoutes from './presentation/routes/user.route';
 
 const app = express();
+
+app.use(express.json());
+app.use(userRoutes);
+
 
 const startServer = async () => {
   try {
