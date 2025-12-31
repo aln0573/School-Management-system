@@ -1,20 +1,25 @@
 import express from "express";
 import "dotenv/config";
 import database from "./infrastructure/database/mongoose/config";
-import userRoutes from './presentation/routes/user.route';
+import userRoutes from "./presentation/routes/user.route";
+import {config} from './infrastructure/config/app.config';
+
 
 const app = express();
 
 app.use(express.json());
 app.use(userRoutes);
 
-
 const startServer = async () => {
   try {
-    const PORT = process.env.PORT;
+    const PORT = process.env.PORT || 8000;
     await database();
     app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT} ✅`);
+      if (process.env.NODE_ENV === "development") {
+        console.log(`Server running on ${config.BASE_URL} ✅`);
+      } else {
+        console.log(`Server Started ✅`);
+      }
     });
   } catch (error: any) {
     console.error("Server failed to connect! ❌", error.message);
