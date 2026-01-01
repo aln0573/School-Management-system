@@ -1,4 +1,4 @@
-export type UserRole = 'admin'| 'parent' | 'teacher' | 'student';
+export type UserRole = 'super_admin'| 'admin'| 'parent' | 'teacher' | 'student';
 
 
 export class User {
