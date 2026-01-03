@@ -1,3 +1,4 @@
+
 export type UserRole = 'super_admin'| 'admin'| 'parent' | 'teacher' | 'student';
 
 
@@ -7,6 +8,9 @@ export class User {
         private email:string,
         private password:string,
         private role:UserRole,
+        private schoolId:string | null,
+        private isActive:boolean,
+        private mustChangePassword:boolean,
         private createdAt:Date,
         private updatedAt:Date
     ) {
@@ -46,12 +50,24 @@ export class User {
         return this.password;
     }
 
+    getSchoolId(){
+        return this.schoolId;
+    }
+
     getRole() {
         return this.role;
     }
 
     getCreatedAt() {
         return this.createdAt;
+    }
+
+    getActive():boolean {
+        return this.isActive;
+    }
+
+    getMustChangePassword():boolean {
+        return this.mustChangePassword;
     }
 
 }

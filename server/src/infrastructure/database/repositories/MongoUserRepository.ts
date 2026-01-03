@@ -1,7 +1,7 @@
 import { User } from "../../../domain/entities/User";
 import { IUserRepositories } from "../../../domain/repositories/IUserRepository";
 import { IUserSchema, UserModel } from "../mongoose/models/UserModel";
-import bcrypt from 'bcrypt';
+import mongoose from "mongoose";
 
 export class MongoUserRepository implements IUserRepositories {
   private toDomain(userDoc: IUserSchema): User {
@@ -10,16 +10,23 @@ export class MongoUserRepository implements IUserRepositories {
       userDoc.email,
       userDoc.password,
       userDoc.role,
+      userDoc.schoolId ? userDoc.schoolId.toString() : null,
+      userDoc.isActive,
+      userDoc.mustChangePassword,
       userDoc.createdAt,
       userDoc.updatedAt
     );
   }
 
   async create(user: User): Promise<User> {
-    const newUser = await new UserModel({
+    const schoolId = user.getSchoolId();
+    const newUser = new UserModel({
       email: user.getEmail(),
       password: user.getPassword(),
       role: user.getRole(),
+      schoolId: schoolId ? new mongoose.Types.ObjectId(schoolId) : null,
+      isActive: user.getActive(),
+      mustChangePassword: user.getMustChangePassword(),
     });
 
     const savedUser = await newUser.save();
@@ -36,8 +43,4 @@ export class MongoUserRepository implements IUserRepositories {
     return user ? this.toDomain(user) : null;
   }
   
-  async comparePassword(plainTextPassword: string, hashedPassword: string): Promise<boolean> {
-    const isMatch = await bcrypt.compare(plainTextPassword, hashedPassword);
-    return isMatch;
-  }
 }

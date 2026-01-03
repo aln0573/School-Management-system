@@ -1,5 +1,4 @@
 import { inject,injectable } from "tsyringe";
-import { randomUUID } from "crypto";
 import { User } from "../../../domain/entities/User";
 import { IUserRepositories } from "../../../domain/repositories/IUserRepository";
 import { CreateUserDTO } from "../../dto/UserDTO";
@@ -13,10 +12,13 @@ export class CreateUser {
     if (existingUser) throw new Error("User already exists");
 
     const user = new User(
-      randomUUID(),
+      "",
       data.email,
       data.password,
       data.role,
+      data.schoolId,
+      data.isActive,
+      data.mustChangePassword || false,
       new Date(),
       new Date()
     );

@@ -1,19 +1,25 @@
-import { inject,injectable } from "tsyringe";
+import { injectable } from "tsyringe";
 import { Request, Response } from "express";
 import { CreateUser } from "../../application/use-cases/auth/CreateUser";
 import { LoginUser } from "../../application/use-cases/auth/LoginUser";
 
 @injectable()
 export class UserController {
-  constructor(private readonly createUserUseCase: CreateUser , private readonly loginUserUseCase:LoginUser) {}
+  constructor(
+    private readonly createUserUseCase: CreateUser , 
+    private readonly loginUserUseCase:LoginUser
+  ) {}
 
   async createUser(req: Request, res: Response): Promise<void> {
     try {
-      const { email, password, role } = req.body;
+      const { email, password, role , schoolId, isActive,mustChangePassword } = req.body;
       const user = await this.createUserUseCase.execute({
         email,
         password,
         role,
+        schoolId,
+        isActive,
+        mustChangePassword
       });
       res
         .status(201)
