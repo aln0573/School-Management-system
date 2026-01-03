@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import { randomUUID } from "crypto";
-import { User } from "../../domain/entities/User";
-import { IUserRepositories } from "../../domain/repositories/IUserRepository";
-import { LoginUserDTO } from "../dto/UserDTO";
+import { User } from "../../../domain/entities/User";
+import { IUserRepositories } from "../../../domain/repositories/IUserRepository";
+import { LoginUserDTO } from "../../dto/UserDTO";
 
 @injectable()
 export class LoginUser {

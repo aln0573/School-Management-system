@@ -2,8 +2,8 @@ import "reflect-metadata";
 import { container } from "tsyringe";
 import { IUserRepositories } from "../domain/repositories/IUserRepository";
 import { MongoUserRepository } from "../infrastructure/database/repositories/MongoUserRepository";
-import { CreateUser } from "../application/use-cases/CreateUser";
-import { LoginUser } from "../application/use-cases/LoginUser";
+import { CreateUser } from "../application/use-cases/auth/CreateUser";
+import { LoginUser } from "../application/use-cases/auth/LoginUser";
 import { UserController } from "../presentation/controllers/UserController";
 
 container.register<IUserRepositories>("IUserRepositories", {

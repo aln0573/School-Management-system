@@ -5,4 +5,4 @@ export interface IUserRepositories {
     findByEmail(email:string):Promise<User | null>;
     findById(id:string):Promise<User | null>;
     comparePassword(plainTextPassword:string,hashedPassword:string):Promise<boolean>;
-}   
+}

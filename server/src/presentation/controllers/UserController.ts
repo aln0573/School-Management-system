@@ -1,7 +1,7 @@
 import { inject,injectable } from "tsyringe";
 import { Request, Response } from "express";
-import { CreateUser } from "../../application/use-cases/CreateUser";
-import { LoginUser } from "../../application/use-cases/LoginUser";
+import { CreateUser } from "../../application/use-cases/auth/CreateUser";
+import { LoginUser } from "../../application/use-cases/auth/LoginUser";
 
 @injectable()
 export class UserController {
