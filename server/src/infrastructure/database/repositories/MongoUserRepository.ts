@@ -1,6 +1,7 @@
 import { User } from "../../../domain/entities/User";
 import { IUserRepositories } from "../../../domain/repositories/IUserRepository";
 import { IUserSchema, UserModel } from "../mongoose/models/UserModel";
+import bcrypt from 'bcrypt';
 
 export class MongoUserRepository implements IUserRepositories {
   private toDomain(userDoc: IUserSchema): User {
@@ -33,5 +34,10 @@ export class MongoUserRepository implements IUserRepositories {
   async findById(id: string): Promise<User | null> {
     const user = await UserModel.findById(id).lean();
     return user ? this.toDomain(user) : null;
+  }
+  
+  async comparePassword(plainTextPassword: string, hashedPassword: string): Promise<boolean> {
+    const isMatch = await bcrypt.compare(plainTextPassword, hashedPassword);
+    return isMatch;
   }
 }

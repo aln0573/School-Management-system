@@ -3,6 +3,7 @@ import { container } from "tsyringe";
 import { IUserRepositories } from "../domain/repositories/IUserRepository";
 import { MongoUserRepository } from "../infrastructure/database/repositories/MongoUserRepository";
 import { CreateUser } from "../application/use-cases/CreateUser";
+import { LoginUser } from "../application/use-cases/LoginUser";
 import { UserController } from "../presentation/controllers/UserController";
 
 container.register<IUserRepositories>("IUserRepositories", {
@@ -11,6 +12,10 @@ container.register<IUserRepositories>("IUserRepositories", {
 
 container.register(CreateUser, {
   useClass: CreateUser,
+});
+
+container.register(LoginUser, {
+  useClass: LoginUser,
 });
 
 container.register(UserController, {

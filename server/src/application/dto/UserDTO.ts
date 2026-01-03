@@ -5,3 +5,9 @@ export interface CreateUserDTO{
     password:string;
     role:UserRole;
 }
+
+export interface LoginUserDTO{
+    email:string;
+    password:string;
+    
+}
