@@ -16,7 +16,7 @@ export class LoginUser {
     const findUser = await this.userRepository.findByEmail(data.email);
     if (!findUser) throw new Error("Invalid email or password");
     
-    const isPasswordValid = this.passwordHasher.compare(data.password, findUser.getPassword());
+    const isPasswordValid = await this.passwordHasher.compare(data.password, findUser.getPassword());
 
     if (!isPasswordValid) throw new Error("Invalid email or password");
 
