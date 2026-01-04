@@ -42,6 +42,14 @@ export class UserController {
         email:data.email,
         password:data.password,
       });
+      
+      res.cookie("access_token", user.token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 24 * 60 * 60 * 1000, 
+      });
+
       res
         .status(200)
         .json({ success: true, message: "Login Successful", user });

@@ -3,11 +3,13 @@ import "dotenv/config";
 import database from "./infrastructure/database/mongoose/config";
 import userRoutes from "./presentation/routes/user.route";
 import {config} from './infrastructure/config/app.config';
+import cookieParser from 'cookie-parser';
 
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(userRoutes);
 
 const startServer = async () => {
