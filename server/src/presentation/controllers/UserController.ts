@@ -2,6 +2,7 @@ import { injectable } from "tsyringe";
 import { Request, Response } from "express";
 import { CreateUser } from "../../application/use-cases/auth/CreateUser";
 import { LoginUser } from "../../application/use-cases/auth/LoginUser";
+import { createUserSchema, loginUserSchema } from "../validators/user.validator";
 
 @injectable()
 export class UserController {
@@ -10,36 +11,45 @@ export class UserController {
     private readonly loginUserUseCase:LoginUser
   ) {}
 
-  async createUser(req: Request, res: Response): Promise<void> {
+  async createUser(req: Request, res: Response): Promise<void > {
     try {
-      const { email, password, role , schoolId, isActive,mustChangePassword } = req.body;
+      const data = createUserSchema.parse(req.body);
       const user = await this.createUserUseCase.execute({
-        email,
-        password,
-        role,
-        schoolId,
-        isActive,
-        mustChangePassword
+        email:data.email,
+        password:data.password,
+        role:data.role,
+        schoolId:data.schoolId,
+        isActive: data.isActive ?? true,
+        mustChangePassword: data.mustChangePassword,
       });
       res
         .status(201)
         .json({ success: true, message: "User Created Successfully", user });
     } catch (error: any) {
+      if(error.name=== "ZodError" ){
+        res.status(400).json({ success:false, error: error.issues });
+        return;
+      }
       res.status(400).json({ error: error.message });
     }
   }
 
   async login(req: Request, res: Response): Promise<void> {
     try {
-      const { email, password } = req.body;
+      const data = loginUserSchema.parse(req.body);
+      
       const user = await this.loginUserUseCase.execute({
-        email,
-        password,
+        email:data.email,
+        password:data.password,
       });
       res
         .status(200)
         .json({ success: true, message: "Login Successful", user });
     }catch (error: any) {
+      if(error.name === 'ZodError' ){
+        res.status(400).json({ success:false,error: error.issues });
+        return;
+      };
       res.status(400).json({ error: error.message });
     }
   }
