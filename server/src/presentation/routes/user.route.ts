@@ -11,8 +11,5 @@ router.post(
   userController.createUser.bind(userController)
 );
 
-router.post(
-  "/api/users/login",
-  userController.login.bind(userController)
-)
+
 export default router;
