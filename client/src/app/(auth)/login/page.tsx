@@ -12,6 +12,8 @@ import leaf3 from "@/public/images/login/leaf_03.png";
 import leaf4 from "@/public/images/login/leaf_04.png";
 import { Eye, EyeOff, Mail } from "lucide-react";
 import { useState } from "react";
+import { useLogin } from "@/src/hooks/useLogin";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,9 +28,17 @@ const Login = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const router = useRouter();
+  const {mutate, isPending, error} = useLogin();
+
   const handleSubmit = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
+       mutate(formData, {
+        onSuccess: () => {
+          router.push("/super-admin"); // adjust later by role
+        },
+      });
       
     } catch (error:any) {
       console.log('submit error',error.message);
@@ -119,11 +129,18 @@ const Login = () => {
 
         <button
         type="submit"
+          disabled = {isPending}
           className="w-full p-4 text-xl font-medium text-white rounded-md 
           bg-[#8f2c24] hover:bg-[#d64c42] transition duration-500"
         >
           Login
         </button>
+
+        {error && (
+          <p className="text-red-500 text-center">
+            {(error as any)?.response?.data?.error || "Login failed"}
+          </p>
+        )}
 
         <div className="flex justify-center text-xl font-medium text-[#8f2c24]">
           <a href="#">Forget Password</a>
