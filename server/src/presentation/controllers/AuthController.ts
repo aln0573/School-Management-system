@@ -13,7 +13,7 @@ export class AuthController {
     async login(req: Request, res: Response): Promise<void> {
     try {
       const data = loginUserSchema.parse(req.body);
-      
+     
       const user = await this.loginUserUseCase.execute({
         email:data.email,
         password:data.password,
@@ -37,5 +37,13 @@ export class AuthController {
       res.status(400).json({ error: error.message });
     }
   }
-}
+  
+    async me(req:Request,res:Response){
+      try {
+        res.status(200).json({success:true,user:{ id:req.user?.userId, role:req.user?.role, schoolId:req.user?.schoolId}})
+      } catch (error: any) {
+         res.status(400).json({ error: error.message });
+      }      
+    }
 
+}
