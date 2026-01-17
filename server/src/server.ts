@@ -1,17 +1,20 @@
+import './di/container';
 import express from "express";
 import "dotenv/config";
 import database from "./infrastructure/database/mongoose/config";
-import userRoutes from "./presentation/routes/user.route";
 import {config} from './infrastructure/config/app.config';
 import cookieParser from 'cookie-parser';
-import authRouter from "./presentation/routes/auth.route";
+import cors from 'cors';
+import { registerRoutes } from "./presentation/routes";
+
 
 
 const app = express();
 
+app.use(cors({origin: config.CLIENT_URL,credentials:true}));
 app.use(express.json());
 app.use(cookieParser());
-app.use([userRoutes,authRouter]);
+registerRoutes(app);
 
 const startServer = async () => {
   try {

@@ -6,6 +6,7 @@ import { CreateUser } from "../application/use-cases/user/CreateUser";
 import { LoginUser } from "../application/use-cases/auth/LoginUser";
 import { UserController } from "../presentation/controllers/UserController";
 import { JwtService } from "../infrastructure/security/JwtService";
+import { PasswordHasher } from "../infrastructure/security/PasswordHasher";
 
 container.register<IUserRepositories>("IUserRepositories", {
   useClass: MongoUserRepository,
@@ -24,5 +25,7 @@ container.register(UserController, {
   useClass: UserController,
 });
 
+container.registerSingleton(JwtService);
+container.registerSingleton(PasswordHasher)
 
 export { container };

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { container } from "tsyringe";
+import { container } from "./../../di/container";
 import { AuthController } from "../controllers/AuthController";
 
 const authRouter = Router();
@@ -7,7 +7,7 @@ const authRouter = Router();
 const authController = container.resolve(AuthController);
 
 authRouter.post(
-  "/api/auth/login",
+  "/login",
   authController.login.bind(authController)
 )
 

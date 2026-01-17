@@ -7,7 +7,7 @@ import { Request, Response } from "express";
 @injectable()
 export class AuthController {
     constructor(
-        private loginUserUseCase:LoginUser
+        private readonly loginUserUseCase:LoginUser
     ){}
 
     async login(req: Request, res: Response): Promise<void> {

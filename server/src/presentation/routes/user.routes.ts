@@ -7,7 +7,7 @@ const router = Router();
 const userController = container.resolve(UserController);
 
 router.post(
-  "/api/users",
+  "/",
   userController.createUser.bind(userController)
 );
 

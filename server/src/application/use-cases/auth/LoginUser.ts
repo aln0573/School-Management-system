@@ -7,7 +7,8 @@ import { PasswordHasher } from "../../../infrastructure/security/PasswordHasher"
 @injectable()
 export class LoginUser {
   constructor(
-    @inject("IUserRepositories") private readonly userRepository: IUserRepositories,
+    @inject("IUserRepositories")
+    private readonly userRepository: IUserRepositories,
     private  jwtService: JwtService,
     private readonly passwordHasher: PasswordHasher
   ) {}
