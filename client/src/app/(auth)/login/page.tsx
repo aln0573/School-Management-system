@@ -36,7 +36,7 @@ const Login = () => {
       e.preventDefault();
        mutate(formData, {
         onSuccess: () => {
-          router.push("/super-admin"); // adjust later by role
+          router.push("/super-admin"); 
         },
       });
       
