@@ -1,42 +1,47 @@
 import { School, Users } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
 function StatCard({
   title,
   value,
   icon: Icon,
+  color,
 }: {
   title: string;
   value: string;
   icon: React.ElementType;
+  color: string;
 }) {
   return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm text-muted-foreground">
-          {title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex items-center justify-between">
-        <div className="text-3xl font-bold">{value}</div>
-        <div className="rounded-full bg-primary/10 p-3">
-          <Icon className="h-6 w-6 text-primary" />
-        </div>
-      </CardContent>
-    </Card>
+    <div className="bg-white rounded-2xl p-5 shadow-sm flex items-center justify-between">
+      <div>
+        <p className="text-sm text-gray-400">{title}</p>
+        <p className="text-3xl font-semibold text-gray-800 mt-1">
+          {value}
+        </p>
+      </div>
+
+      <div className={`p-3 rounded-full ${color}`}>
+        <Icon className="w-6 h-6" />
+      </div>
+    </div>
   );
 }
 
 export default function SchoolsStats() {
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
-      <StatCard title="Total Schools" value="128" icon={School} />
-      <StatCard title="Active Schools" value="114" icon={Users} />
+    <div className="grid gap-4 sm:grid-cols-2 mb-6">
+      <StatCard
+        title="Total Schools"
+        value="128"
+        icon={School}
+        color="bg-indigo-100 text-indigo-600"
+      />
+      <StatCard
+        title="Active Schools"
+        value="114"
+        icon={Users}
+        color="bg-green-100 text-green-600"
+      />
     </div>
   );
 }

@@ -1,73 +1,97 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 
-export default function SchoolsTable() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>School List</CardTitle>
-      </CardHeader>
+/* ---------- TYPES ---------- */
+export interface School {
+  id: string;
+  name: string;
+  email: string;
+  location: string;
+  phone: string;
+  status: "Active" | "Inactive";
+  highlight?: boolean;
+}
 
-      <CardContent className="p-0">
+interface SchoolsTableProps {
+  schools: School[];
+}
+
+/* ---------- COMPONENT ---------- */
+export default function SchoolsTable({ schools }: SchoolsTableProps) {
+  return (
+    <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+      <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="border-b bg-muted/50">
+          <thead className="sticky top-0 bg-white z-10 text-gray-400 border-b">
             <tr>
-              <th className="px-4 py-3 text-left">School Name</th>
-              <th className="px-4 py-3 text-left">Admin Email</th>
-              <th className="px-4 py-3 text-left">Location</th>
-              <th className="px-4 py-3 text-left">Phone</th>
-              <th className="px-4 py-3 text-left">Status</th>
-              <th className="px-4 py-3 text-left">Actions</th>
+              <th className="px-6 py-4 text-left">School Name</th>
+              <th>Admin Email</th>
+              <th>Location</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th className="text-center">Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr className="border-b">
-              <td className="px-4 py-3">Green Valley Public School</td>
-              <td className="px-4 py-3">demo@gmail.com</td>
-              <td className="px-4 py-3">Kozhikode</td>
-              <td className="px-4 py-3">9512346780</td>
-              <td className="px-4 py-3">
-                <span className="rounded-full bg-green-100 px-2 py-1 text-xs text-green-700">
-                  Active
-                </span>
-              </td>
-              <td className="px-4 py-3">
-                <div className="flex items-center gap-2">
-                  {/* View */}
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    title="View School"
-                  >
-                    <Eye className="h-4 w-4" />
-                  </Button>
+            {schools.map((s) => (
+              <tr
+                key={s.id}
+                className={`border-t transition ${
+                  s.highlight ? "bg-indigo-50" : "hover:bg-gray-50"
+                }`}
+              >
+                <td className="px-6 py-4 font-medium text-gray-800">
+                  {s.name}
+                </td>
 
-                  {/* Edit */}
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    title="Edit School"
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Button>
+                <td>{s.email}</td>
+                <td>{s.location}</td>
+                <td>{s.phone}</td>
 
-                  {/* Delete */}
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="text-destructive hover:text-destructive"
-                    title="Delete School"
+                <td>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs ${
+                      s.status === "Active"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
                   >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </td>
-            </tr>
+                    {s.status}
+                  </span>
+                </td>
+
+                <td>
+                  <div className="flex justify-center gap-2">
+                    <button className="w-9 h-9 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                      <Eye size={15} />
+                    </button>
+
+                    <button className="w-9 h-9 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                      <Pencil size={15} />
+                    </button>
+
+                    <button className="w-9 h-9 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
-      </CardContent>
-    </Card>
+      </div>
+
+      {/* Pagination (UI-only for now) */}
+      <div className="flex items-center justify-between px-6 py-4 text-sm text-gray-500 border-t">
+        <span>Showing 1–{schools.length} of {schools.length}</span>
+        <div className="flex gap-2">
+          <button className="px-3 py-1 rounded bg-gray-100">Prev</button>
+          <span className="px-3 py-1 rounded bg-indigo-100 text-indigo-600">
+            1
+          </span>
+          <button className="px-3 py-1 rounded bg-gray-100">Next</button>
+        </div>
+      </div>
+    </div>
   );
 }
