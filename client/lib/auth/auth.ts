@@ -5,3 +5,8 @@ export const loginUser = async (data: LoginPayload) => {
   const response = await api.post("/api/auth/login", data);
   return response.data;
 };
+
+export const getMe = async () => {
+  const response = await api.get("/api/auth/me");
+  return response.data.user;
+};

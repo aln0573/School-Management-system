@@ -11,9 +11,11 @@ import leaf2 from "@/public/images/login/leaf_02.png";
 import leaf3 from "@/public/images/login/leaf_03.png";
 import leaf4 from "@/public/images/login/leaf_04.png";
 import { Eye, EyeOff, Mail } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLogin } from "@/src/hooks/useLogin";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/src/hooks/useAuth";
+
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,21 +32,46 @@ const Login = () => {
 
   const router = useRouter();
   const {mutate, isPending, error} = useLogin();
+  const { data: user } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    try {
-      e.preventDefault();
-       mutate(formData, {
-        onSuccess: () => {
-          router.push("/super-admin"); 
-        },
-      });
-      
-    } catch (error:any) {
-      console.log('submit error',error.message);
-      
-    }
+    e.preventDefault();
+    mutate(formData);
   };
+
+   // 🔥 Role-based redirect
+  useEffect(() => {
+    if (!user) return;
+
+    switch (user.role) {
+      case "super_admin":
+        router.replace("/super-admin");
+        break;
+
+      case "admin":
+        router.replace("/home");
+        break;
+
+      case "teacher":
+        router.replace("/teacher/dashboard");
+        break;
+
+      case "school":
+        router.replace("/school/dashboard");
+        break;
+
+      case "parent":
+        router.replace("/parent/dashboard");
+        break;
+
+      case "student":
+        router.replace("/student/dashboard");
+        break;
+
+      default:
+        router.replace("/login");
+    }
+  }, [user, router]);
 
   return (
     <section className="relative flex items-center justify-center w-full h-screen overflow-hidden font-[Poppins]">
@@ -133,7 +160,7 @@ const Login = () => {
           className="w-full p-4 text-xl font-medium text-white rounded-md 
           bg-[#8f2c24] hover:bg-[#d64c42] transition duration-500"
         >
-          Login
+          {isPending ? "Logging in..." : "Login"}
         </button>
 
         {error && (
