@@ -15,6 +15,7 @@ import { useState, useEffect } from "react";
 import { useLogin } from "@/src/hooks/useLogin";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/hooks/useAuth";
+import Loader from "@/src/components/Loader/Loader";
 
 
 const Login = () => {
@@ -32,7 +33,7 @@ const Login = () => {
 
   const router = useRouter();
   const {mutate, isPending, error} = useLogin();
-  const { data: user } = useAuth();
+  const { user, isLoading, isError } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,6 +73,12 @@ const Login = () => {
         router.replace("/login");
     }
   }, [user, router]);
+
+  if (isLoading || user){
+    return <div className="h-screen w-screen flex items-center justify-center">
+              <Loader />
+            </div>
+  }
 
   return (
     <section className="relative flex items-center justify-center w-full h-screen overflow-hidden font-[Poppins]">

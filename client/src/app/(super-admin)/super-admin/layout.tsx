@@ -1,10 +1,15 @@
-import Sidebar from "../../components/sidebar/super-admin/Sidebar";
+"use client";
+
+import useRoleGuard from "@/src/hooks/useRoleGuard";
+import Sidebar from "../../../components/sidebar/super-admin/Sidebar";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+ useRoleGuard(["super_admin"]);
+
   return (
     <div className="flex min-h-screen">
       <Sidebar />

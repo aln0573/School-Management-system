@@ -1,5 +1,6 @@
 "use client";
 
+import Loader from "@/src/components/Loader/Loader";
 import { Search, Eye, Pencil, Trash2, Plus } from "lucide-react";
 
 /* ---------------- DATA ---------------- */
