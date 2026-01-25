@@ -64,7 +64,7 @@ export const superAdminMenu = [
       },
       {
         name: "Logout",
-        href: "/logout",
+        action: "logout" as const,
         icon: LogOut,
       },
     ],

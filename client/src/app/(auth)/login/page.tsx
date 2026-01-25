@@ -42,6 +42,8 @@ const Login = () => {
 
    // 🔥 Role-based redirect
   useEffect(() => {
+    if( isLoading) return;
+
     if (!user) return;
 
     switch (user.role) {
@@ -72,13 +74,23 @@ const Login = () => {
       default:
         router.replace("/login");
     }
-  }, [user, router]);
+  }, [user, isLoading, router]);
 
-  if (isLoading || user){
-    return <div className="h-screen w-screen flex items-center justify-center">
-              <Loader />
-            </div>
-  }
+      if (isLoading) {
+      return (
+        <div className="h-screen w-screen flex items-center justify-center">
+          <Loader />
+        </div>
+      );
+    }
+
+    if (user) {
+      return (
+        <div className="h-screen w-screen flex items-center justify-center">
+          <Loader />
+        </div>
+      );
+    }
 
   return (
     <section className="relative flex items-center justify-center w-full h-screen overflow-hidden font-[Poppins]">

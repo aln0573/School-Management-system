@@ -2,29 +2,24 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import { api } from "@/lib/api";
+import { useAuth } from "./useAuth";
 
 export default function useRoleGuard(allowedRoles: string[]) {
   const router = useRouter();
+  const { user, isLoading, isError } = useAuth();
 
   useEffect(() => {
-    const checkRole = async () => {
-      try {
-        const res = await api.get("/api/auth/me", {
-          withCredentials: true,
-        });
+    if (isLoading) return; // ⛔ wait for uth check
 
-        const role = res.data.user.role;
+    if (!user ) {
+      router.replace("/login");
+      return;
+    }
 
-        if (!allowedRoles.includes(role)) {
-          router.replace("/unauthorized");
-        }
-      } catch (err) {
-        router.replace("/login");
-      }
-    };
+    if (!allowedRoles.includes(user.role)) {
+      router.replace("/unauthorized");
+    }
+  }, [user, isLoading, router, allowedRoles]);
 
-    checkRole();
-  }, []);
+  return { isLoading };
 }

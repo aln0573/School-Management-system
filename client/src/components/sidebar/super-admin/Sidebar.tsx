@@ -22,14 +22,27 @@ export default function Sidebar() {
             </p>
 
             <div className="space-y-1">
-              {section.items.map((item) => (
-                <SidebarItem
-                  key={item.name}
-                  name={item.name}
-                  href={item.href}
-                  icon={item.icon}
-                />
-              ))}
+              {section.items.map((item) => {
+                if ("action" in item && item.action === "logout") {
+                    return (
+                      <SidebarItem
+                        key={item.name}
+                        name={item.name}
+                        icon={item.icon}
+                        action="logout"
+                      />
+                    );
+                  }
+
+                  return (
+                    <SidebarItem
+                      key={item.name}
+                      name={item.name}
+                      icon={item.icon}
+                      href={item.href}
+                    />
+                  );
+                })}
             </div>
 
             <Separator className="mt-4" />
