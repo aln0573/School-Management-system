@@ -19,4 +19,10 @@ authRouter.get(
   authController.me.bind(authController)
 )
 
+authRouter.post(
+  "/logout",
+  authenticate,
+  authController.logout.bind(authController)
+)
+
 export default authRouter;
