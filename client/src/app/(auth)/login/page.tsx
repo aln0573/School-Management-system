@@ -11,11 +11,9 @@ import leaf2 from "@/public/images/login/leaf_02.png";
 import leaf3 from "@/public/images/login/leaf_03.png";
 import leaf4 from "@/public/images/login/leaf_04.png";
 import { Eye, EyeOff, Mail } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLogin } from "@/src/hooks/useLogin";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/src/hooks/useAuth";
-import Loader from "@/src/components/Loader/Loader";
+import GuestGuard from "@/src/components/auth/GuestGuard";
 
 
 const Login = () => {
@@ -31,68 +29,15 @@ const Login = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const router = useRouter();
   const {mutate, isPending, error} = useLogin();
-  const { user, isLoading, isError } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     mutate(formData);
   };
 
-   // 🔥 Role-based redirect
-  useEffect(() => {
-    if( isLoading) return;
-
-    if (!user) return;
-
-    switch (user.role) {
-      case "super_admin":
-        router.replace("/super-admin");
-        break;
-
-      case "admin":
-        router.replace("/home");
-        break;
-
-      case "teacher":
-        router.replace("/teacher/dashboard");
-        break;
-
-      case "school":
-        router.replace("/school/dashboard");
-        break;
-
-      case "parent":
-        router.replace("/parent/dashboard");
-        break;
-
-      case "student":
-        router.replace("/student/dashboard");
-        break;
-
-      default:
-        router.replace("/login");
-    }
-  }, [user, isLoading, router]);
-
-      if (isLoading) {
-      return (
-        <div className="h-screen w-screen flex items-center justify-center">
-          <Loader />
-        </div>
-      );
-    }
-
-    if (user) {
-      return (
-        <div className="h-screen w-screen flex items-center justify-center">
-          <Loader />
-        </div>
-      );
-    }
-
   return (
+    <GuestGuard>
     <section className="relative flex items-center justify-center w-full h-screen overflow-hidden font-[Poppins]">
       {/* Background */}
       <Image
@@ -141,7 +86,7 @@ const Login = () => {
 
         <div className="flex justify-between">
           <input
-            type="email"
+            type="text"
             onChange={handleChange}
             value={formData.email}
             name="email"
@@ -183,9 +128,17 @@ const Login = () => {
         </button>
 
         {error && (
-          <p className="text-red-500 text-center">
-            {(error as any)?.response?.data?.error || "Login failed"}
-          </p>
+          <div className="text-red-500 text-center text-sm">
+            {(() => {
+              const err = (error as any)?.response?.data?.error;
+              if (Array.isArray(err)) {
+                return err.map((e: any, i: number) => (
+                  <p key={i}>{e.message}</p>
+                ));
+              }
+              return <p>{err || "Login failed"}</p>;
+            })()}
+          </div>
         )}
 
         <div className="flex justify-center text-xl font-medium text-[#8f2c24]">
@@ -193,6 +146,7 @@ const Login = () => {
         </div>
       </form>
     </section>
+    </GuestGuard>
   );
 };
 

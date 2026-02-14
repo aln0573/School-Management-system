@@ -6,7 +6,7 @@ import { useAuth } from "./useAuth";
 
 export default function useRoleGuard(allowedRoles: string[]) {
   const router = useRouter();
-  const { user, isLoading, isError } = useAuth();
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
     if (isLoading) return; // ⛔ wait for uth check

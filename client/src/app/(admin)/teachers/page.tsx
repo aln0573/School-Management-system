@@ -1,6 +1,6 @@
 "use client";
 
-import Loader from "@/src/components/Loader/Loader";
+import NextImage from "next/image";
 import { Search, Eye, Pencil, Trash2, Plus } from "lucide-react";
 
 /* ---------------- DATA ---------------- */
@@ -161,8 +161,11 @@ export default function TeachersPage() {
                 >
                   {/* INFO */}
                   <td className="px-6 py-4 flex items-center gap-3">
-                    <img
+                    <NextImage
                       src={t.avatar}
+                      alt={t.name}
+                      width={40}
+                      height={40}
                       className="w-10 h-10 rounded-full"
                     />
                     <div>
@@ -245,7 +248,13 @@ export default function TeachersPage() {
         {teachers.map((t) => (
           <div key={t.id} className="bg-white p-4 rounded-xl shadow-sm">
             <div className="flex items-center gap-3 mb-3">
-              <img src={t.avatar} className="w-10 h-10 rounded-full" />
+              <NextImage
+                src={t.avatar}
+                alt={t.name}
+                width={40}
+                height={40}
+                className="w-10 h-10 rounded-full"
+              />
               <div>
                 <p className="font-medium">{t.name}</p>
                 <p className="text-xs text-gray-400">{t.email}</p>
