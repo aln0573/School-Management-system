@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { useLogout } from "@/src/hooks/useLogout";
 import {
   Home, Users, User, BookOpen, Layers, FileText,
   ClipboardList, BarChart2, Calendar, MessageSquare,
@@ -29,9 +30,11 @@ interface SidebarContentProps {
   pathname: string;
   router: ReturnType<typeof useRouter>;
   setOpen: (open: boolean) => void;
+  logout: () => void;
+  isPending: boolean;
 }
 
-const SidebarContent = ({ pathname, router, setOpen }: SidebarContentProps) => (
+const SidebarContent = ({ pathname, router, setOpen, logout, isPending }: SidebarContentProps) => (
   <div className="w-64 bg-white h-full flex flex-col border-r">
     {/* Logo */}
     <div className="flex items-center gap-2 px-6 py-5">
@@ -65,11 +68,11 @@ const SidebarContent = ({ pathname, router, setOpen }: SidebarContentProps) => (
     {/* Logout */}
     <div className="px-4 pb-6">
       <div
-        onClick={() => router.push("/login")}
+        onClick={() => logout()}
         className="flex items-center gap-3 px-3 py-2 rounded-lg text-red-500 hover:bg-red-50 cursor-pointer"
       >
         <LogOut size={18} />
-        Logout
+        {isPending ? "Logging out..." : "Logout"}
       </div>
     </div>
   </div>
@@ -79,6 +82,7 @@ export default function AdminSidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
+  const { mutate: logout, isPending } = useLogout();
 
   return (
     <>
@@ -92,7 +96,7 @@ export default function AdminSidebar() {
 
       {/* Desktop Sidebar */}
       <aside className="hidden lg:block">
-        <SidebarContent pathname={pathname} router={router} setOpen={setOpen} />
+        <SidebarContent pathname={pathname} router={router} setOpen={setOpen} logout={logout} isPending={isPending} />
       </aside>
 
       {/* Mobile Drawer */}
@@ -100,7 +104,7 @@ export default function AdminSidebar() {
         <div className="fixed inset-0 z-50 flex">
           <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
           <div className="relative">
-            <SidebarContent pathname={pathname} router={router} setOpen={setOpen} />
+            <SidebarContent pathname={pathname} router={router} setOpen={setOpen} logout={logout} isPending={isPending} />
             <button
               className="absolute top-4 right-4"
               onClick={() => setOpen(false)}
