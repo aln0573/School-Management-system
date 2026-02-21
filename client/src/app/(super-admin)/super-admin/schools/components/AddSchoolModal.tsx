@@ -1,66 +1,149 @@
 "use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-interface AddSchoolModalProps {
-  open: boolean;
-  onClose: () => void;
+export interface School {
+  id: string;
+  name: string;
+  email: string;
+  location: string;
+  phone: string;
+  status: "Active" | "Inactive";
 }
 
-export default function AddSchoolModal({ open, onClose }: AddSchoolModalProps) {
+interface Props {
+  open: boolean;
+  onClose: () => void;
+  school?: School | null;
+  onSave: (school: School) => void;
+}
+
+export default function SchoolModal({
+  open,
+  onClose,
+  school,
+  onSave,
+}: Props) {
+  const [form, setForm] = useState<School>({
+    id: "",
+    name: "",
+    email: "",
+    location: "",
+    phone: "",
+    status: "Active",
+  });
+
+  useEffect(() => {
+    if (school) {
+      setForm(school);
+    } else {
+      setForm({
+        id: crypto.randomUUID(),
+        name: "",
+        email: "",
+        location: "",
+        phone: "",
+        status: "Active",
+      });
+    }
+  }, [school]);
+
+  const handleChange = (field: keyof School, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave(form);
+    onClose();
+  };
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-lg rounded-2xl">
         <DialogHeader>
-          <DialogTitle>Add School</DialogTitle>
+          <DialogTitle className="text-xl font-semibold">
+            {school ? "Edit School" : "Add School"}
+          </DialogTitle>
         </DialogHeader>
 
-        {/* Form */}
-        <form className="space-y-4">
-          <div className="space-y-1">
+        <form onSubmit={handleSubmit} className="space-y-5 mt-4">
+          <div>
             <Label>School Name</Label>
-            <Input placeholder="Enter school name" />
+            <Input
+              value={form.name}
+              onChange={(e) => handleChange("name", e.target.value)}
+              className="mt-1"
+            />
           </div>
 
-          <div className="space-y-1">
+          <div>
             <Label>Admin Email</Label>
-            <Input type="email" placeholder="admin@school.com" />
+            <Input
+              value={form.email}
+              onChange={(e) => handleChange("email", e.target.value)}
+              className="mt-1"
+            />
           </div>
 
-          <div className="space-y-1">
+          <div>
             <Label>Location</Label>
-            <Input placeholder="City / District" />
+            <Input
+              value={form.location}
+              onChange={(e) => handleChange("location", e.target.value)}
+              className="mt-1"
+            />
           </div>
 
-          <div className="space-y-1">
-            <Label>Phone Number</Label>
-            <Input placeholder="Enter phone number" />
+          <div>
+            <Label>Phone</Label>
+            <Input
+              value={form.phone}
+              onChange={(e) => handleChange("phone", e.target.value)}
+              className="mt-1"
+            />
           </div>
 
-          <div className="space-y-1">
+          <div>
             <Label>Status</Label>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Select status" />
+            <Select
+              value={form.status}
+              onValueChange={(value) =>
+                handleChange("status", value as any)
+              }
+            >
+              <SelectTrigger className="mt-1">
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
+                <SelectItem value="Active">Active</SelectItem>
+                <SelectItem value="Inactive">Inactive</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          {/* Actions */}
-          <div className="flex justify-end gap-2 pt-4">
+          <div className="flex justify-end gap-3 pt-4">
             <Button variant="outline" type="button" onClick={onClose}>
               Cancel
             </Button>
             <Button type="submit">
-              Add School
+              {school ? "Update School" : "Add School"}
             </Button>
           </div>
         </form>
